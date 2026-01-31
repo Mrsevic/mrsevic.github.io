@@ -1,8 +1,7 @@
 source "https://rubygems.org"
-gem 'jekyll'
+gem 'jekyll', '~> 4.3'
 gem 'jekyll-paginate'
 gem 'jekyll-gist'
 gem 'jekyll-seo-tag'
 gem 'jekyll-sitemap'
-gem 'jekyll-git_metadata'
-gem 'disqus-for-jekyll'
+gem 'webrick'

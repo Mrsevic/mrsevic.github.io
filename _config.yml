@@ -1,15 +1,13 @@
 ﻿site: Stefan's blog
-url: 
-author: Stefan Mršević
+url:
 author:
-  name: Stefan
+  name: Stefan Mršević
   email: stefan.mrsevic@gmail.com
   url: https://mrsevic.github.io/
 title: Stefan's blog
-description: Blog about technology and .. miscelaneous stuff 
-logo: 
-image: 
-twitter: stefan_mrsevic  
+description: Blog about technology and .. miscelaneous stuff
+logo:
+image:
 twitter:
   username: stefan_mrsevic
   creator: stefan_mrsevic
@@ -37,14 +35,13 @@ compress_html:
 
 sass:
   sass_dir:          _sass
-  style:            :compressed
+  style:            compressed
 
 plugins:
   - jekyll-paginate
   - jekyll-gist
   - jekyll-seo-tag
   - jekyll-sitemap
-  - disqus-for-jekyll
 
 collections:
   pages:
