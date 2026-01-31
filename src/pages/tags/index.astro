@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('posts');
+
+// Get all unique tags with their counts
+const tagCounts = posts.reduce((acc, post) => {
+  post.data.tags?.forEach((tag) => {
+    acc[tag] = (acc[tag] || 0) + 1;
+  });
+  return acc;
+}, {} as Record<string, number>);
+
+const tags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
+---
+
+<BaseLayout title="Tags" description="All blog post tags">
+  <article class="page-content">
+    <h1>Tags</h1>
+
+    {tags.length === 0 ? (
+      <p>No tags found.</p>
+    ) : (
+      <ul class="tag-list">
+        {tags.map(([tag, count]) => (
+          <li>
+            <a href={`/tag/${tag}/`}>#{tag}</a>
+            <span class="count">({count})</span>
+          </li>
+        ))}
+      </ul>
+    )}
+  </article>
+</BaseLayout>
+
+<style>
+  .tag-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .tag-list li {
+    display: inline-block;
+    margin: 0.5rem 1rem 0.5rem 0;
+  }
+
+  .tag-list a {
+    font-size: 1.1rem;
+  }
+
+  .count {
+    font-size: 0.9rem;
+    opacity: 0.6;
+  }
+</style>

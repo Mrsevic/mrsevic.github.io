@@ -1,0 +1,43 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+
+const formattedDate = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+}).format(project.data.date);
+---
+
+<BaseLayout title={project.data.title} description={project.data.description || project.data.summary}>
+  <article class="post" role="article">
+    <div class="post-meta">
+      <h1>{project.data.title}</h1>
+      {project.data.category && <p class="category">{project.data.category}</p>}
+      <time class="date" datetime={project.data.date.toISOString()}>{formattedDate}</time>
+    </div>
+
+    <div class="content">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .category {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin: 0.5rem 0;
+  }
+</style>

@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.vue';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+
+  // Get all unique tags
+  const tags = [...new Set(posts.flatMap((post) => post.data.tags || []))];
+
+  return tags.map((tag) => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: posts
+        .filter((post) => post.data.tags?.includes(tag))
+        .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
+    },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<BaseLayout title={`#${tag}`} description={`Posts tagged with #${tag}`}>
+  <article class="page-content tag-header">
+    <h1>#{tag}</h1>
+    <p>{posts.length} post{posts.length !== 1 ? 's' : ''}</p>
+  </article>
+
+  <div class="grid">
+    {posts.map((post, index) => (
+      <PostCard
+        client:load
+        title={post.data.title}
+        summary={post.data.summary}
+        date={post.data.date}
+        url={`/posts/${post.id}/`}
+        index={index}
+      />
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .tag-header {
+    margin-bottom: 1rem;
+  }
+
+  .tag-header h1 {
+    margin-bottom: 0.5rem;
+  }
+
+  .tag-header p {
+    opacity: 0.7;
+    margin: 0;
+  }
+</style>
